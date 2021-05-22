@@ -1,0 +1,265 @@
+{
+  "blocks": [
+    {
+      "key": "ddhun",
+      "text": "This page is built with Draft.js. So you can actually edit it. Try it out! 😎",
+      "type": "unstyled",
+      "depth": 0,
+      "inlineStyleRanges": [],
+      "entityRanges": [],
+      "data": {}
+    },
+    {
+      "key": "284ql",
+      "text": "Click buttons at the top to toggle block types or inline styles.",
+      "type": "unstyled",
+      "depth": 0,
+      "inlineStyleRanges": [],
+      "entityRanges": [],
+      "data": {}
+    },
+    {
+      "key": "e5j4i",
+      "text": "Press Shift + Enter to insert a new line in a block.",
+      "type": "unstyled",
+      "depth": 0,
+      "inlineStyleRanges": [
+        {
+          "offset": 6,
+          "length": 13,
+          "style": "CODE"
+        }
+      ],
+      "entityRanges": [],
+      "data": {}
+    },
+    {
+      "key": "2q4i7",
+      "text": "draft-js-prism-decorator",
+      "type": "header-one",
+      "depth": 0,
+      "inlineStyleRanges": [],
+      "entityRanges": [],
+      "data": {}
+    },
+    {
+      "key": "eb0i0",
+      "text": "This generates a decorator that applies syntax highlighting to Draft.js( https://draftjs.org/ ) code blocks with Prism( https://prismjs.com/ ).",
+      "type": "unstyled",
+      "depth": 0,
+      "inlineStyleRanges": [],
+      "entityRanges": [],
+      "data": {}
+    },
+    {
+      "key": "bm6tt",
+      "text": "It is a simple decorator object with just strategy and component, so you can easily integrate it into your Draft.js app.",
+      "type": "unstyled",
+      "depth": 0,
+      "inlineStyleRanges": [
+        {
+          "offset": 42,
+          "length": 8,
+          "style": "CODE"
+        },
+        {
+          "offset": 55,
+          "length": 9,
+          "style": "CODE"
+        }
+      ],
+      "entityRanges": [],
+      "data": {}
+    },
+    {
+      "key": "82vnk",
+      "text": "Repository",
+      "type": "header-two",
+      "depth": 0,
+      "inlineStyleRanges": [],
+      "entityRanges": [],
+      "data": {}
+    },
+    {
+      "key": "1kfja",
+      "text": "https://github.com/y-hiraoka/draft-js-prism-decorator/",
+      "type": "unstyled",
+      "depth": 0,
+      "inlineStyleRanges": [],
+      "entityRanges": [],
+      "data": {}
+    },
+    {
+      "key": "21bgm",
+      "text": "Install",
+      "type": "header-two",
+      "depth": 0,
+      "inlineStyleRanges": [],
+      "entityRanges": [],
+      "data": {}
+    },
+    {
+      "key": "fktgi",
+      "text": "npm i draft-js-prism-decorator draft-js prismjs",
+      "type": "code-block",
+      "depth": 0,
+      "inlineStyleRanges": [],
+      "entityRanges": [],
+      "data": {}
+    },
+    {
+      "key": "5qn5c",
+      "text": "draft-js and prismjs are peerDependencies for draft-js-prism-decorator.",
+      "type": "unstyled",
+      "depth": 0,
+      "inlineStyleRanges": [
+        {
+          "offset": 0,
+          "length": 8,
+          "style": "CODE"
+        },
+        {
+          "offset": 13,
+          "length": 7,
+          "style": "CODE"
+        },
+        {
+          "offset": 46,
+          "length": 24,
+          "style": "CODE"
+        }
+      ],
+      "entityRanges": [],
+      "data": {}
+    },
+    {
+      "key": "et9eb",
+      "text": "Usage",
+      "type": "header-two",
+      "depth": 0,
+      "inlineStyleRanges": [],
+      "entityRanges": [],
+      "data": {}
+    },
+    {
+      "key": "7e6oq",
+      "text": "import \"prismjs/themes/prism.css\";\nimport { useState } from \"react\";\nimport { Editor, CompositeDecorator, ContentBlock, EditorState } from \"draft-js\";\nimport createPrismDecorator from \"draft-js-prism-decorator\";\n\nconst prismDecorator = createPrismDecorator();\nconst decorators = new CompositeDecorator([prismDecorator, otherDecorator]);\n\nconst EditorApp = () => {\n  const [editorState, setEditorState] = useState(\n    EditorState.createEmpty(decorators),\n  );\n\n  return <Editor editorState={editorState} onChange={setEditorState} />;\n};",
+      "type": "code-block",
+      "depth": 0,
+      "inlineStyleRanges": [],
+      "entityRanges": [],
+      "data": {}
+    },
+    {
+      "key": "asq55",
+      "text": "API",
+      "type": "header-two",
+      "depth": 0,
+      "inlineStyleRanges": [],
+      "entityRanges": [],
+      "data": {}
+    },
+    {
+      "key": "6epdk",
+      "text": "Two options can be passed:",
+      "type": "unstyled",
+      "depth": 0,
+      "inlineStyleRanges": [],
+      "entityRanges": [],
+      "data": {}
+    },
+    {
+      "key": "c716i",
+      "text": "import { ContentBlock, DraftDecorator } from \"draft-js\";\n\ntype Options = {\n  filter?: (block: ContentBlock) => boolean;\n  getLanguage?: (block: ContentBlock) => string;\n};\n\ndefault export function createPrismDecorator(options?: Options): DraftDecorator;",
+      "type": "code-block",
+      "depth": 0,
+      "inlineStyleRanges": [],
+      "entityRanges": [],
+      "data": {}
+    },
+    {
+      "key": "6d712",
+      "text": "filter",
+      "type": "header-three",
+      "depth": 0,
+      "inlineStyleRanges": [
+        {
+          "offset": 0,
+          "length": 6,
+          "style": "CODE"
+        }
+      ],
+      "entityRanges": [],
+      "data": {}
+    },
+    {
+      "key": "1et35",
+      "text": "A function that filters blocks. By default, it is determined by whether block.getType() is \"code-block\" or not.",
+      "type": "unstyled",
+      "depth": 0,
+      "inlineStyleRanges": [
+        {
+          "offset": 72,
+          "length": 15,
+          "style": "CODE"
+        },
+        {
+          "offset": 91,
+          "length": 12,
+          "style": "CODE"
+        }
+      ],
+      "entityRanges": [],
+      "data": {}
+    },
+    {
+      "key": "6potq",
+      "text": "getLanguage",
+      "type": "header-three",
+      "depth": 0,
+      "inlineStyleRanges": [
+        {
+          "offset": 0,
+          "length": 11,
+          "style": "CODE"
+        }
+      ],
+      "entityRanges": [],
+      "data": {}
+    },
+    {
+      "key": "r31u",
+      "text": "A function that gets language string. If it is not passed, block.getData().get(\"language\") will be used.",
+      "type": "unstyled",
+      "depth": 0,
+      "inlineStyleRanges": [
+        {
+          "offset": 59,
+          "length": 31,
+          "style": "CODE"
+        }
+      ],
+      "entityRanges": [],
+      "data": {}
+    },
+    {
+      "key": "2avfi",
+      "text": "LICENSE",
+      "type": "header-two",
+      "depth": 0,
+      "inlineStyleRanges": [],
+      "entityRanges": [],
+      "data": {}
+    },
+    {
+      "key": "avbpp",
+      "text": "MIT",
+      "type": "unstyled",
+      "depth": 0,
+      "inlineStyleRanges": [],
+      "entityRanges": [],
+      "data": {}
+    }
+  ],
+  "entityMap": {}
+}

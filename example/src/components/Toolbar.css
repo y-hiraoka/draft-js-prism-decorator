@@ -1,0 +1,37 @@
+.Toolbar {
+  border-radius: 4px;
+  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.16);
+  background-color: #ffffff;
+  overflow: hidden;
+  padding: 0 8px;
+}
+
+.Toolbar__row {
+  overflow-x: auto;
+}
+
+.Toolbar__row + .Toolbar__row {
+  border-top: 1px solid rgba(0, 0, 0, 0.16);
+}
+
+.Toolbar__row-inner {
+  display: flex;
+  align-items: center;
+  width: max-content;  
+}
+
+.Toolbar__button {
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #918b8b;
+  transition: background-color 0.2s, color 0.1s ease;
+}
+
+.Toolbar__button:hover,.Toolbar__button:active {
+  background-color: #f5f5f5;
+}
+
+.Toolbar__button[data-is-active="true"] {
+  color: #201e1e;
+}

@@ -1,0 +1,15 @@
+.App {
+  padding: 8px 16px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.App__Toolbar {
+  z-index: 2;
+  position: sticky;
+  top: 16px;
+}
+
+.App__Editor {
+  margin-top: 32px;
+}
