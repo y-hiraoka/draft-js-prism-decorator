@@ -1,7 +1,7 @@
 {
   "name": "draft-js-prism-decorator",
   "version": "0.0.0",
-  "description": "",
+  "description": "Draft.js decorator for syntax highlighting with Prism.js.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "module": "dist/index.module.js",
