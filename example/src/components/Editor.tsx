@@ -29,7 +29,7 @@ export const Editor: React.VFC<Props> = ({ editorState, setEditorState }) => {
 
       return "not-handled";
     },
-    [],
+    [setEditorState],
   );
 
   const handleReturn = useCallback(
@@ -41,7 +41,7 @@ export const Editor: React.VFC<Props> = ({ editorState, setEditorState }) => {
 
       return "not-handled";
     },
-    [],
+    [setEditorState],
   );
 
   const blockStyleFn = useCallback((block: ContentBlock) => {
@@ -74,7 +74,7 @@ export const Editor: React.VFC<Props> = ({ editorState, setEditorState }) => {
 
       return getDefaultKeyBinding(e);
     },
-    [editorState],
+    [editorState, setEditorState],
   );
 
   const customStyleMap: DraftStyleMap = {
