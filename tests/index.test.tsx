@@ -14,9 +14,21 @@ const mockTokenList: ReturnType<typeof Prism.tokenize> = [
   { type: "operator", content: "=", length: 1, alias: "", greedy: true },
   " React",
   { type: "punctuation", content: ".", length: 1, alias: "", greedy: true },
-  { type: "function", content: "useRef", length: 6, alias: "", greedy: true },
+  {
+    type: "function",
+    content: "useRef",
+    length: 6,
+    alias: "string-alias",
+    greedy: true,
+  },
   { type: "punctuation", content: "(", length: 1, alias: "", greedy: true },
-  { type: "keyword", content: "null", length: 4, alias: "", greedy: true },
+  {
+    type: "keyword",
+    content: "null",
+    length: 4,
+    alias: ["array", "alias"],
+    greedy: true,
+  },
   { type: "punctuation", content: ")", length: 1, alias: "", greedy: true },
   { type: "punctuation", content: ";", length: 1, alias: "", greedy: true },
 ];
@@ -75,7 +87,7 @@ test("strategy passes each start and end to a callback function.", () => {
 test("DraftDecoratorComponent render.", () => {
   const { component: Component } = createPrismDecorator();
 
-  const { getByText } = render(
+  const { getByText, rerender } = render(
     <Component
       blockKey="blockKey"
       contentState={contentState}
@@ -88,6 +100,32 @@ test("DraftDecoratorComponent render.", () => {
 
   const spanElement = getByText("useRef");
 
-  expect(spanElement.className).toEqual("token function");
+  expect(spanElement.className).toEqual("token function string-alias");
   expect(spanElement.getAttribute("data-offset-key")).toEqual("offsetKey");
+
+  rerender(
+    <Component
+      blockKey="blockKey"
+      contentState={contentState}
+      offsetKey="offsetKey"
+      start={25}
+      end={29}
+      children="null"
+    />,
+  );
+
+  expect(spanElement.className).toEqual("token keyword array alias");
+
+  rerender(
+    <Component
+      blockKey="blockKey"
+      contentState={contentState}
+      offsetKey="offsetKey"
+      start={0}
+      end={5}
+      children="const"
+    />,
+  );
+
+  expect(spanElement.className).toEqual("token keyword");
 });

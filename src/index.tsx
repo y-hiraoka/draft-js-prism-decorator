@@ -87,14 +87,23 @@ const createTokenComponent =
 
     let start = 0;
     let end = 0;
-    let tokenType: string = "";
+    let classNames: string[] = ["token"];
 
     for (const token of tokenList) {
       end = end + token.length;
 
       if (typeof token !== "string") {
         if (start === props.start && end === props.end) {
-          tokenType = token.type;
+          classNames.push(token.type);
+
+          if (token.alias) {
+            if (Array.isArray(token.alias)) {
+              classNames.push(...token.alias);
+            } else {
+              classNames.push(token.alias);
+            }
+          }
+
           break;
         }
       }
@@ -103,7 +112,7 @@ const createTokenComponent =
     }
 
     return (
-      <span className={`token ${tokenType}`} data-offset-key={props.offsetKey}>
+      <span className={classNames.join(" ")} data-offset-key={props.offsetKey}>
         {props.children}
       </span>
     );
