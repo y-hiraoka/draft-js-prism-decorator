@@ -87,7 +87,7 @@ const createTokenComponent =
 
     let start = 0;
     let end = 0;
-    let classNames: string[] = ["token"];
+    const classNames: string[] = ["token"];
 
     for (const token of tokenList) {
       end = end + token.length;
