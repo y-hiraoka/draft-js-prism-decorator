@@ -7,12 +7,12 @@ type Options = {
    * A function that filters blocks.
    * By default, it is determined by whether `block.getType()` is "code-block" or not.
    */
-  filter?: (block: ContentBlock) => boolean;
+  filter?: (block: ContentBlock, contentState: ContentState) => boolean;
   /**
    * A function that gets language string.
    * If it is not passed, `block.getData().get("language")` will be used.
    */
-  getLanguage?: (block: ContentBlock) => string;
+  getLanguage?: (block: ContentBlock, contentState: ContentState) => string;
 };
 
 const defaultFilter = (block: ContentBlock) => block.getType() === "code-block";
@@ -57,11 +57,11 @@ type GetLanguage = Required<Options>["getLanguage"];
 
 const createStrategy =
   (filter: Filter, getLanguage: GetLanguage): DraftDecorator["strategy"] =>
-  (contentBlock, callback) => {
-    if (!filter(contentBlock)) return;
+  (contentBlock, callback, contentState) => {
+    if (!filter(contentBlock, contentState)) return;
 
     const blockText = contentBlock.getText();
-    const language = getLanguage(contentBlock);
+    const language = getLanguage(contentBlock, contentState);
     const tokenList = Prism.tokenize(blockText, Prism.languages[language]);
 
     let start = 0;
@@ -82,7 +82,7 @@ const createTokenComponent =
   props => {
     const contentBlock = props.contentState.getBlockForKey(props.blockKey);
     const blockText = contentBlock.getText();
-    const language = getLanguage(contentBlock);
+    const language = getLanguage(contentBlock, props.contentState);
     const tokenList = Prism.tokenize(blockText, Prism.languages[language]);
 
     let start = 0;
