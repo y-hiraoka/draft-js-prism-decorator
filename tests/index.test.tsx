@@ -42,22 +42,6 @@ const contentBlock = new ContentBlock({
 
 const contentState = ContentState.createFromBlockArray([contentBlock]);
 
-test("defaultGetLanguage throws an error.", () => {
-  const numberLanguageBlock = contentBlock.merge({
-    data: { language: 999 },
-  }) as ContentBlock;
-
-  const contentState = ContentState.createFromBlockArray([numberLanguageBlock]);
-
-  const { strategy } = createPrismDecorator();
-
-  const mockCallback = jest.fn();
-
-  expect(() =>
-    strategy(numberLanguageBlock, mockCallback, contentState),
-  ).toThrowError('block.getData().get("language") is not string.');
-});
-
 test("strategy ignores a block if filter returns false.", () => {
   const { strategy } = createPrismDecorator({ filter: () => false });
 
@@ -84,7 +68,7 @@ test("strategy passes each start and end to a callback function.", () => {
   expect(mockCallback.mock.calls[3][1]).toBe(24);
 });
 
-test("DraftDecoratorComponent render.", () => {
+test("render DraftDecoratorComponent.", () => {
   const { component: Component } = createPrismDecorator();
 
   const { getByText, rerender } = render(
@@ -128,4 +112,44 @@ test("DraftDecoratorComponent render.", () => {
   );
 
   expect(spanElement.className).toEqual("token keyword");
+});
+
+test("render DraftDecoratorComponent without cache.", () => {
+  const sampleCode = `import { useState } from "react";`;
+  const mockTokenList: ReturnType<typeof Prism.tokenize> = [
+    { type: "keyword", content: "import", alias: "", length: 6, greedy: true },
+    " ",
+    { type: "punctuation", content: "{", alias: "", length: 1, greedy: true },
+    " useState ",
+    { type: "punctuation", content: "}", alias: "", length: 1, greedy: true },
+    " ",
+    { type: "keyword", content: "from", alias: "", length: 4, greedy: true },
+    " ",
+    { type: "string", content: '"react"', alias: "", length: 7, greedy: true },
+    { type: "punctuation", content: ";", alias: "", length: 1, greedy: true },
+  ];
+  mockedPrism.tokenize.mockReset();
+  mockedPrism.tokenize.mockReturnValue(mockTokenList);
+
+  const contentBlock = new ContentBlock({
+    key: "blockKey2",
+    text: sampleCode,
+    type: "code-block",
+  }).merge({ data: { language: "javascript" } }) as ContentBlock;
+
+  const contentState = ContentState.createFromBlockArray([contentBlock]);
+
+  const { component: Component } = createPrismDecorator();
+
+  const { getByText, rerender } = render(
+    <Component
+      blockKey="blockKey2"
+      contentState={contentState}
+      offsetKey="offsetKey2"
+      start={7}
+      end={8}
+    />,
+  );
+
+  expect(mockedPrism.tokenize.mock.calls.length).toEqual(1);
 });

@@ -2,6 +2,26 @@ import React from "react";
 import { ContentBlock, ContentState, DraftDecorator } from "draft-js";
 import Prism from "prismjs";
 
+class InMemoryCache {
+  private _cache = new Map<string, Prism.Token>();
+
+  private _generateKey(blockKey: string, start: number, end: number) {
+    return `${blockKey}-${start}-${end}`;
+  }
+
+  setToken(blockKey: string, start: number, end: number, token: Prism.Token) {
+    const cacheKey = this._generateKey(blockKey, start, end);
+    this._cache.set(cacheKey, token);
+  }
+
+  getToken(blockKey: string, start: number, end: number) {
+    const cacheKey = this._generateKey(blockKey, start, end);
+    return this._cache.get(cacheKey);
+  }
+}
+
+const cache = new InMemoryCache();
+
 type Options = {
   /**
    * A function that filters blocks.
@@ -18,12 +38,7 @@ type Options = {
 const defaultFilter = (block: ContentBlock) => block.getType() === "code-block";
 const defaultGetLanguage = (block: ContentBlock) => {
   const language = block.getData().get("language");
-
-  if (typeof language !== "string") {
-    throw new Error('block.getData().get("language") is not string.');
-  }
-
-  return language;
+  return typeof language !== "string" ? "" : language;
 };
 
 /**
@@ -60,6 +75,7 @@ const createStrategy =
   (contentBlock, callback, contentState) => {
     if (!filter(contentBlock, contentState)) return;
 
+    const blockKey = contentBlock.getKey();
     const blockText = contentBlock.getText();
     const language = getLanguage(contentBlock, contentState);
     const tokenList = Prism.tokenize(blockText, Prism.languages[language]);
@@ -70,6 +86,7 @@ const createStrategy =
       end = end + token.length;
 
       if (typeof token !== "string") {
+        cache.setToken(blockKey, start, end, token);
         callback(start, end);
       }
 
@@ -81,34 +98,40 @@ const createTokenComponent =
   (getLanguage: GetLanguage): React.FC<DraftDecoratorComponentProps> =>
   props => {
     const contentBlock = props.contentState.getBlockForKey(props.blockKey);
-    const blockText = contentBlock.getText();
-    const language = getLanguage(contentBlock, props.contentState);
-    const tokenList = Prism.tokenize(blockText, Prism.languages[language]);
+    const blockKey = contentBlock.getKey();
+    let token = cache.getToken(blockKey, props.start, props.end);
+    const classNames = ["token"];
 
-    let start = 0;
-    let end = 0;
-    const classNames: string[] = ["token"];
+    if (token === undefined) {
+      const blockText = contentBlock.getText();
+      const language = getLanguage(contentBlock, props.contentState);
+      const tokenList = Prism.tokenize(blockText, Prism.languages[language]);
 
-    for (const token of tokenList) {
-      end = end + token.length;
+      let start = 0;
+      let end = 0;
 
-      if (typeof token !== "string") {
-        if (start === props.start && end === props.end) {
-          classNames.push(token.type);
+      for (const _token of tokenList) {
+        end = end + _token.length;
 
-          if (token.alias) {
-            if (Array.isArray(token.alias)) {
-              classNames.push(...token.alias);
-            } else {
-              classNames.push(token.alias);
-            }
+        if (typeof _token !== "string") {
+          if (start === props.start && end === props.end) {
+            token = _token;
+            break;
           }
-
-          break;
         }
-      }
 
-      start = end;
+        start = end;
+      }
+    }
+
+    token?.type && classNames.push(token.type);
+
+    if (token?.alias) {
+      if (Array.isArray(token.alias)) {
+        classNames.push(...token.alias);
+      } else {
+        classNames.push(token.alias);
+      }
     }
 
     return (
