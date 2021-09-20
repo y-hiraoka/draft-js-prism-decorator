@@ -170,7 +170,7 @@
     },
     {
       "key": "c716i",
-      "text": "import { ContentBlock, DraftDecorator } from \"draft-js\";\n\ntype Options = {\n  filter?: (block: ContentBlock) => boolean;\n  getLanguage?: (block: ContentBlock) => string;\n};\n\ndefault export function createPrismDecorator(options?: Options): DraftDecorator;",
+      "text": "import { ContentBlock, DraftDecorator } from \"draft-js\";\n\ntype Options = {\n  filter?: (block: ContentBlock, content: ContentState) => boolean;\n  getLanguage?: (block: ContentBlock, content: ContentState) => string;\n};\n\ndefault export function createPrismDecorator(options?: Options): DraftDecorator;",
       "type": "code-block",
       "depth": 0,
       "inlineStyleRanges": [],

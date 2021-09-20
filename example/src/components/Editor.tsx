@@ -10,6 +10,7 @@ import {
   EditorState,
   getDefaultKeyBinding,
   KeyBindingUtil,
+  Modifier,
   RichUtils,
 } from "draft-js";
 
@@ -77,6 +78,33 @@ export const Editor: React.VFC<Props> = ({ editorState, setEditorState }) => {
     [editorState, setEditorState],
   );
 
+  const handlePastedText = useCallback(
+    (text: string, _: unknown, editorState: EditorState): DraftHandleValue => {
+      const selection = editorState.getSelection();
+      const contentState = editorState.getCurrentContent();
+      const currentBlock = contentState.getBlockForKey(selection.getFocusKey());
+
+      if (
+        selection.getAnchorKey() !== selection.getFocusKey() ||
+        currentBlock.getType() !== "code-block"
+      ) {
+        return "not-handled";
+      }
+
+      const removed = Modifier.removeRange(contentState, selection, "forward");
+
+      const inserted = Modifier.insertText(
+        removed,
+        removed.getSelectionAfter(),
+        text,
+      );
+
+      setEditorState(EditorState.push(editorState, inserted, "insert-characters"));
+      return "handled";
+    },
+    [setEditorState],
+  );
+
   const customStyleMap: DraftStyleMap = {
     CODE: {
       fontSize: "0.9em",
@@ -97,6 +125,7 @@ export const Editor: React.VFC<Props> = ({ editorState, setEditorState }) => {
       handleReturn={handleReturn}
       blockStyleFn={blockStyleFn}
       keyBindingFn={keyBindingFn}
+      handlePastedText={handlePastedText}
       customStyleMap={customStyleMap}
     />
   );

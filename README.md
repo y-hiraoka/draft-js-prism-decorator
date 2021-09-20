@@ -32,7 +32,7 @@ const EditorApp = () => {
     EditorState.createEmpty(decorators),
   );
 
-  return <Editor editorState={editorState} onChange={setEditorState} />
+  return <Editor editorState={editorState} onChange={setEditorState} />;
 };
 ```
 
@@ -41,11 +41,11 @@ const EditorApp = () => {
 Two options can be passed:
 
 ```tsx
-import { ContentBlock, DraftDecorator } from "draft-js";
+import { ContentBlock, ContentState, DraftDecorator } from "draft-js";
 
 type Options = {
-    filter?: (block: ContentBlock) => boolean;
-    getLanguage?: (block: ContentBlock) => string;
+    filter?: (block: ContentBlock, content: ContentState) => boolean;
+    getLanguage?: (block: ContentBlock, content: ContentState) => string;
 };
 
 default export function createPrismDecorator(options?: Options): DraftDecorator;
